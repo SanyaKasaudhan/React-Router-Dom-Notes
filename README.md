@@ -12,7 +12,8 @@ useRouteMatch
 # useHistory
 The useHistory hook gives you access to the history instance that you may use to navigate.
 
-`import { useHistory } from "react-router-dom";
+```javascript
+import { useHistory } from "react-router-dom";
 
 function HomeButton() {
   let history = useHistory();
@@ -26,7 +27,8 @@ function HomeButton() {
       Go home
     </button>
   );
-}`
+}
+```
 
 # useLocation
 The useLocation hook returns the location object that represents the current URL. You can think about it like a useState that returns a new location whenever the URL changes.This could be really useful e.g. in a situation where you would like to trigger a new “page view” event using your web analytics tool whenever a new page loads, as in the following example:
