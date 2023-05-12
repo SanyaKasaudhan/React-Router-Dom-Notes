@@ -375,3 +375,14 @@ let routes = (
      
 );
 Now, if we’re at /about, <Switch> will start looking for a matching <Route>. <Route path="/about"/> will match and <Switch> will stop looking for matches and render <About>. Similarly, if we’re at /michael then <User> will render.
+
+# generatePath
+The generatePath function can be used to generate URLs to the routes. Internally the path-to-regexp library is used.import { generatePath } from "react-router";
+
+```javascript
+ generatePath("/user/:id/:entity(posts|comments)", {
+  id: 1,
+  entity: "posts"
+});
+// Will return /user/1/posts
+```
