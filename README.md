@@ -184,11 +184,13 @@ ReactDOM.render(
   node
 );
 
-Route render methods
+# Route render methods
 The recommended method of rendering something with a <Route> is to use children elements, as shown above. There are, however, a few other methods you can use to render something with a <Route>. These are provided mostly for supporting apps that were built with earlier versions of the router before hooks were introduced.
-<Route component>
-<Route render>
-<Route children> function
+1. <Route component>
+      
+2. <Route render>
+      
+3. <Route children> function
 
 Route props
 All three render methods will be passed the same three route props
@@ -220,3 +222,110 @@ ReactDOM.render(
 );
 ```
 When you use component (instead of render or children, below) the router uses React.createElement to create a new React element from the given component. That means if you provide an inline function to the component prop, you would create a new component every render. This results in the existing component unmounting and the new component mounting instead of just updating the existing component. When using an inline function for inline rendering, use the render or the children prop (below).
+      
+# render: func
+This allows for convenient inline rendering and wrapping without the undesired remounting explained above.Instead of having a new React element created for you using the component prop, you can pass in a function to be called when the location matches. The render prop function has access to all the same route props (match, location and history) as the component render prop.
+
+```javascript
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+// convenient inline rendering
+ReactDOM.render(
+  <Router>
+    <Route path="/home" render={() => <div>Home</div>} />
+  </Router>,
+  node
+);
+
+// wrapping/composing
+// You can spread routeProps to make them available to your rendered Component
+function FadingRoute({ component: Component, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={routeProps => (
+        <FadeIn>
+          <Component {...routeProps} />
+        </FadeIn>
+      )}
+    />
+  );
+}
+
+ReactDOM.render(
+  <Router>
+    <FadingRoute path="/cool" component={Something} />
+  </Router>,
+  node
+);
+```
+
+Warning: <Route component> takes precedence over <Route render> so don’t use both in the same <Route>.
+children: func
+Sometimes you need to render whether the path matches the location or not. In these cases, you can use the function children prop. It works exactly like render except that it gets called whether there is a match or not.The children render prop receives all the same route props as the component and render methods, except when a route fails to match the URL, then match is null. This allows you to dynamically adjust your UI based on whether or not the route matches. Here we’re adding an active class if the route matches.
+
+```javascript
+import React from "react";
+import ReactDOM from "react-dom";
+import {
+  BrowserRouter as Router,
+  Link,
+  Route
+} from "react-router-dom";
+
+function ListItemLink({ to, ...rest }) {
+  return (
+    <Route
+      path={to}
+      children={({ match }) => (
+        <li className={match ? "active" : ""}>
+          <Link to={to} {...rest} />
+        </li>
+      )}
+    />
+  );
+}
+
+ReactDOM.render(
+  <Router>
+    <ul>
+      <ListItemLink to="/somewhere" />
+      <ListItemLink to="/somewhere-else" />
+    </ul>
+  </Router>,
+  node
+);
+This could also be useful for animations:<Route
+  children={({ match, ...rest }) => (
+    {/* Animate will always render, so you can use lifecycles
+        to animate its child in and out */}
+    <Animate>
+      {match && <Something {...rest}/>}
+    </Animate>
+  )}
+/>
+
+```
+Warning: <Route children> takes precedence over both <Route component> and <Route render> so don’t use more than one in the same <Route>.
+# path: string | string[]
+Any valid URL path or array of paths that path-to-regexp@^1.7.0 understands.
+
+```javascript
+   <Route path="/users/:id">
+  <User />
+</Route>
+<Route path={["/users/:id", "/profile/:id"]}>
+  <User />
+</Route>
+Routes without a path always match.
+exact: bool
+When true, will only match if the path matches the location.pathname exactly.<Route exact path="/one">
+  <About />
+</Route>
+path	location.pathname	exact	matches?
+/one	/one/two	true	no
+/one	/one/two	false	yes
+
+```
