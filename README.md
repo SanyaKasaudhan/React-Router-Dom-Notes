@@ -165,3 +165,58 @@ Rendering a <Redirect> will navigate to a new location. The new location will ov
   {loggedIn ? <Redirect to="/dashboard" /> : <PublicHomePage />}
 </Route>
 ```
+ # <Route>
+The Route component is perhaps the most important component in React Router to understand and learn to use well. Its most basic responsibility is to render some UI when its path matches the current URL.Consider the following code:import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+ReactDOM.render(
+  <Router>
+    <div>
+      <Route exact path="/">
+        <Home />
+      </Route>
+      <Route path="/news">
+        <NewsFeed />
+      </Route>
+    </div>
+  </Router>,
+  node
+);
+
+Route render methods
+The recommended method of rendering something with a <Route> is to use children elements, as shown above. There are, however, a few other methods you can use to render something with a <Route>. These are provided mostly for supporting apps that were built with earlier versions of the router before hooks were introduced.
+<Route component>
+<Route render>
+<Route children> function
+
+Route props
+All three render methods will be passed the same three route props
+  
+match
+  
+location
+  
+history
+  
+ # component
+A React component to render only when the location matches. It will be rendered with route props.
+  
+  ```javascript
+  import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+// All route props (match, location and history) are available to User
+function User(props) {
+  return <h1>Hello {props.match.params.username}!</h1>;
+}
+
+ReactDOM.render(
+  <Router>
+    <Route path="/user/:username" component={User} />
+  </Router>,
+  node
+);
+```
+When you use component (instead of render or children, below) the router uses React.createElement to create a new React element from the given component. That means if you provide an inline function to the component prop, you would create a new component every render. This results in the existing component unmounting and the new component mounting instead of just updating the existing component. When using an inline function for inline rendering, use the render or the children prop (below).
