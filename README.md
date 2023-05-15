@@ -186,20 +186,20 @@ ReactDOM.render(
 
 # Route render methods
 The recommended method of rendering something with a <Route> is to use children elements, as shown above. There are, however, a few other methods you can use to render something with a <Route>. These are provided mostly for supporting apps that were built with earlier versions of the router before hooks were introduced.
-1. <Route component>
+1. Route component
       
-2. <Route render>
+2. Route render
       
-3. <Route children> function
+3. Route children function
 
 Route props
 All three render methods will be passed the same three route props
   
-match
+1. match
   
-location
+2. location
   
-history
+3. history
   
  # component
 A React component to render only when the location matches. It will be rendered with route props.
