@@ -1,13 +1,13 @@
 # React-Router-Dom-Notes
 You need to be using React >= 16.8 in order to use any of these hooks!
 
-useHistory
+1. useHistory
 
-useLocation
+2. useLocation
 
-useParams
+3. useParams
 
-useRouteMatch
+4. useRouteMatch
 
 # useHistory
 The useHistory hook gives you access to the history instance that you may use to navigate.
